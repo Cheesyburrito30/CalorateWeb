@@ -55,7 +55,7 @@ $(function(){
 			getWorkout: function() {
 				let thisLog = {id: $(this).attr('id')}
 				console.log(thisLog)
-				logID = thisLog.id
+				let logID = thisLog.id
 				let updateData = {log: thisLog}
 				let getLog = $.ajax({
 					type: "GET",
