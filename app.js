@@ -1,6 +1,6 @@
 $(function(){
 	let WorkoutLog = (function($, undefined) {
-		let API_BASE = "https://cheesyworkoutlog-api.herokuapp.com/"
+		let API_BASE = "https://cheesyworkoutlog-api.herokuapp.com/api/"
 		let userDefinitions=[]
 		let setAuthHeader = function(sessionToken) {
 			window.localStorage.setItem("sessionToken", sessionToken)
