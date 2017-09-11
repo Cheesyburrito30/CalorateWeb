@@ -63,6 +63,7 @@ $(function(){
 	},
 	//loginout method
 		logininout: function(data){
+			console.log("clicked")
 			if (window.localStorage.getItem("sessionToken")){
 					window.localStorage.removeItem("sessionToken")
 						$("#loginout").text("Login")
