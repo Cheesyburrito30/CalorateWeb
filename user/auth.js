@@ -67,6 +67,7 @@ $(function(){
 			if (window.localStorage.getItem("sessionToken")){
 					window.localStorage.removeItem("sessionToken")
 						$("#loginout").text("Login")
+					window.location.reload()
 			}
 		}
 
