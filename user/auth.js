@@ -61,7 +61,7 @@ $(function(){
 			$("#li_error").text("There was an issue with sign up").show()
 		})
 	},
-	//loginout method
+	//loginout method 
 		loginout: function(data){
 			console.log("clicked")
 			if (window.localStorage.getItem("sessionToken")){
