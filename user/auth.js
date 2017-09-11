@@ -62,7 +62,7 @@ $(function(){
 		})
 	},
 	//loginout method
-		logininout: function(data){
+		loginout: function(data){
 			console.log("clicked")
 			if (window.localStorage.getItem("sessionToken")){
 					window.localStorage.removeItem("sessionToken")
