@@ -24,7 +24,7 @@ gulp.task('bundle', function(){
 		.pipe(gulp.dest("./dist")) //save bundle.js
 })
 //default task when 'gulp' runs: bundle, starts web server, then watches for changes
-gulp.task('watch' function(){
+gulp.task('watch', function(){
 	gulp.watch(javascriptFiles, ['bundle'])
 })
 gulp.task('default', ['bundle', 'watch'])
