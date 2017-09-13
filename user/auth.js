@@ -5,9 +5,9 @@ $(function(){
 			//User/PW Vars
 			let age = $("#su_age").val
 			let height = $("#su_height").val
-			let startWeight = $("#su_startWeight").val
-			let goalWeight = $("#su_goalWeight").val
-			let userGender = $("#su_userGender").val
+			let startWeight = $("#su_startWeight").val()
+			let goalWeight = $("#su_goalWeight").val()
+			let userGender = $("#su_userGender").val()
 			let username=$("#su_username").val()
 			let password=$("#su_password").val()
 			let confirmPW =$("#su_confirmPW").val()
@@ -18,30 +18,37 @@ $(function(){
 				startweight:startWeight, goalweight:goalWeight, 
 				gender:userGender}}
 		//signup post
-		let signup = $.ajax({	
-				type: "POST",
-				url: WorkoutLog.API_BASE + "user",
-				data: JSON.stringify( user ),
-				contentType: "application/json"
-			})
-		//signupdon/fail
-		signup.done(function(data){
-			if (data.sessionToken){
-				WorkoutLog.setAuthHeader(data.sessionToken)
-				WorkoutLog.definition.fetchAll()
-				WorkoutLog.log.fetchAll()
+		let signup = (function(){
+			if(confirmPW === password){
+
+				$.ajax({	
+					type: "POST",
+					url: WorkoutLog.API_BASE + "user",
+					data: JSON.stringify( user ),
+					contentType: "application/json"
+				})
+				.done(function(data){
+				if (data.sessionToken){
+					WorkoutLog.setAuthHeader(data.sessionToken)
+					WorkoutLog.definition.fetchAll()
+					WorkoutLog.log.fetchAll()
+				}
+				$('#signup-modal').modal("hide")
+				$('.disabled').removeClass("disabled")
+				$(".hidden").removeClass("hidden")
+				$('#loginout').text("Logout")
+				$("a[href='#define']").tab('show')
+				console.log("worked")
+				})
+				.fail(function(){
+					$("#su_error").text("There was an issue with sign up").show()
+				})
+			}else{
+				$("#su_error").text("Passwords don't match").show()
+				$("#su_password").val("")
+				$("#su_confirmPW").val("")
 			}
-
-			$('#signup-modal').modal("hide")
-			$('.disabled').removeClass("disabled")
-			$(".hidden").removeClass("hidden")
-			$('#loginout').text("Logout")
-			$("a[href='#define']").tab('show')
-			console.log("worked")
-		}).fail(function(){
-			$("#su_error").text("There was an issue with sign up").show()
-		})
-
+		})()
 	},
 //login method
 	login: function(){
@@ -91,6 +98,8 @@ $(function(){
 		$("#loginout").on("click", WorkoutLog.loginout)
 
 		if (window.localStorage.getItem("sessionToken")) {
-			$("#loginout").text("logout")
+			$("#home").removeClass("active")
+			$("a[href='#define']").tab("show")
+			$(".hidden").removeClass("hidden")
 		}
 })
