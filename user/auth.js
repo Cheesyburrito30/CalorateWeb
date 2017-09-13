@@ -3,10 +3,20 @@ $(function(){
 //signup method
 	signup: function(){
 			//User/PW Vars
-			let username=$('#su_username').val()
-			let password=$('#su_password').val()
+			let age = $("#su_age").val
+			let height = $("#su_height").val
+			let startWeight = $("#su_startWeight").val
+			let goalWeight = $("#su_goalWeight").val
+			let userGender = $("#su_userGender").val
+			let username=$("#su_username").val()
+			let password=$("#su_password").val()
+			let confirmPW =$("#su_confirmPW").val()
+			let email = $("#su_email").val()
 			//user object
-			let user={user:{username: username,password: password}}
+			let user={user:{username: username,password: password,
+				email: email,age:age,height:height,
+				startWeight:startWeight,goalWeight:goalWeight,
+				gender:userGender}}
 		//signup post
 		let signup = $.ajax({	
 				type: "POST",
