@@ -13,9 +13,9 @@ $(function(){
 			let confirmPW =$("#su_confirmPW").val()
 			let email = $("#su_email").val()
 			//user object
-			let user={user:{username: username,password: password,
-				email: email,age:age,height:height,
-				startWeight:startWeight,goalWeight:goalWeight,
+			let user={user:{username: username, password: password, 
+				email: email, age:age, height:height,
+				startweight:startWeight, goalweight:goalWeight, 
 				gender:userGender}}
 		//signup post
 		let signup = $.ajax({	
@@ -34,6 +34,7 @@ $(function(){
 
 			$('#signup-modal').modal("hide")
 			$('.disabled').removeClass("disabled")
+			$(".hidden").removeClass("hidden")
 			$('#loginout').text("Logout")
 			$("a[href='#define']").tab('show')
 			console.log("worked")
@@ -62,6 +63,7 @@ $(function(){
 			}
 			$("#login-modal").modal("hide")
 			$(".disabled").removeClass("disabled")
+			$(".hidden").removeClass("hidden")
 			$("#loginout").text("Logout")
 			$("#li_username").val("")
 			$("#li_password").val("")
