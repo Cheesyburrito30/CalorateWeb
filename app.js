@@ -1,6 +1,7 @@
 $(function(){
 	let WorkoutLog = (function($, undefined) {
 		let API_BASE = "https://cheesyworkoutlog-api.herokuapp.com/api/"
+		// let API_BASE = "http://localhost:3000/api/"
 		let userDefinitions=[]
 		let setAuthHeader = function(sessionToken) {
 			window.localStorage.setItem("sessionToken", sessionToken)
@@ -34,8 +35,8 @@ $(function(){
 		if (target === "#log"){
 			WorkoutLog.log.setDefinitions()
 		}
-		if (target === "#update-log") {
-			WorkoutLog.log.setDefinitions()
+		if (target === "#profile") {
+			WorkoutLog.user.setProfile()
 		}
 		if (target === "#history") {
 			WorkoutLog.log.setHistory()

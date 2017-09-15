@@ -1,43 +1,53 @@
 $(function(){
 	$.extend(WorkoutLog,{
 		log:{
-			workouts:[],
-			setDefinitions: function() {
-				let defs = WorkoutLog.definition.userDefinitions
-				let len = defs.length
-				let opts
-				for (let i = 0; i < len; i++) {
-					opts+="<option value='" + defs[i].id + "'>" + defs[i].description + "</option>"
-				}
-				$("#log-definition").children().remove()
-				$("#log-definition").append(opts)
-				$("#update-definition").children().remove()
-				$("#update-definition").append(opts)
-			},
+			meals:[],
 			setHistory: function(){
-				let history = WorkoutLog.log.workouts
+				let history = WorkoutLog.log.meals
 				let len = history.length
 				let lis=""
 				for (let i = 0; i < len; i++) {
-					lis += "<li class='list-group-item'>" + 
-					history[i].def + " - " +
-					history[i].result + " " +
-					//pass the log.id into the button id attribute // watch your quotes!
-					'<div class= "pull-right">' +
-						'<button id ="' + history[i].id + '" class = "update"><strong>U</strong></button>' +
-						'<button id ="' + history[i].id + '" class = "remove"><strong>X</strong></button>' +
-					'</div></li>'
+					let dateMade = history[i].createdAt.slice(0, 10)
+					lis +=
+		'<div class="panel panel-default">' +
+    	'<div class="panel-heading" role="tab" id="' + history[i].name + '">' +
+    	'<h4 class="panel-title"><a role="button" data-toggle="collapse" data-parent="#accordion" href="#' + history[i].id + '" aria-expanded="true" aria-controls="' + history[i].id + '">'+
+		dateMade + " " + history[i].name + '</a></h4></div>' +
+    	'<div id="' + history[i].id + '" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="' + history[i].name + '">' +
+        '<div class="panel-body">' +
+        '<ul>' +
+        "<li> Total Calories: " + history[i].calories +"</li>" +
+		"<li> Total Protein: " + history[i].protein +"</li>" +
+		"<li> Total Fat: " + history[i].fat +"</li>" +
+		"<li> Total Carbs: " + history[i].carbs +"</li>" +
+		"</ul>" + 
+        '</div></div></div>'
 						}
-				$("#history-list").children().remove()
-				$("#history-list").append(lis)
+				$("#accordion").children().remove()
+				$("#accordion").append(lis)
 			},
-			create: function() {
-				let itsLog = {
-					desc: $("#log-description").val(),
-					result: $("#log-result").val(),
-					def: $("#log-definition option:selected").text()
+			create: function(event) {
+				event.preventDefault()
+				let servings = $("#mealServings").val()
+				let name= $("#mealName").val()
+				let type = $("#mealType").val()
+				let cals = $("#mealCals").val() * servings
+				let protein = $("#mealProtein").val() * servings
+				let fat = $("#mealFat").val() * servings
+				let carbs = $("#mealCarbs").val() * servings
+				
+
+				let meal = {
+					name: name,
+					type: type,
+					calories: cals,
+					protein: protein,
+					fat: fat,
+					carbs: carbs,
+					servings: servings
 				}
-				let postData = {log: itsLog}
+				console.log(meal)
+				let postData = {log: meal}
 				let logger= $.ajax({
 					type:"POST",
 					url: WorkoutLog.API_BASE + "log",
@@ -45,13 +55,18 @@ $(function(){
 					contentType: "application/json"
 				})
 				logger.done(function(data){
-					WorkoutLog.log.workouts.push(data)
-					$("#log-result").val("")
-					$("#log-description").val("")
-					$("#def-logtype").val("")
-					$("a[href='#history']").tab("show")
+					WorkoutLog.log.meals.push(data)
+					console.log('done done done')
+					$("#mealName").val("")
+					$("#mealCals").val("")
+					$("#mealProtein").val("")
+					$("#mealFat").val("")
+					$("#mealCarbs").val("")
+					$("#mealServings").val("")
+					$('a[href="#history"]').tab("show")
 				})
 			},
+
 			getWorkout: function() {
 				let thisLog = {id: $(this).attr('id')}
 				console.log(thisLog)
@@ -116,9 +131,9 @@ $(function(){
 				$(this).closest("li").remove()  // looks at itself to see if it is an 
 												// "li" and if it doesn't then it looks up the branch
 				//deletes item out of workouts array
-				for (let i=0; i < WorkoutLog.log.workouts.length; i++){
-					if (WorkoutLog.log.workouts[i].id == thisLog.id){
-						WorkoutLog.log.workouts.splice(i, 1)
+				for (let i=0; i < WorkoutLog.log.meals.length; i++){
+					if (WorkoutLog.log.meals[i].id == thisLog.id){
+						WorkoutLog.log.meals.splice(i, 1)
 					}
 				}
 				deleteLog.fail(function(){
@@ -134,7 +149,7 @@ $(function(){
 					}
 				})
 				.done(function(data){
-					WorkoutLog.log.workouts = data
+					WorkoutLog.log.meals = data
 				})
 				.fail(function(err){
 					console.log(err)
@@ -142,7 +157,7 @@ $(function(){
 			}
 		}
 	})
-	$("#log-save").on("click", WorkoutLog.log.create)
+	$("#newMealSave").on("click", WorkoutLog.log.create)
 	$("#history-list").delegate('.remove', 'click', WorkoutLog.log.delete)
 	$("#log-update").on('click', WorkoutLog.log.updateWorkout)
 	$("#history-list").delegate('.update', 'click', WorkoutLog.log.getWorkout)
